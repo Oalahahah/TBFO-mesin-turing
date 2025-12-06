@@ -23,7 +23,19 @@ const transition = {
 };
 
 function simulation(){
-    const animating = setInterval(calculate, 1500);
+    // show buffering UI and start timer
+    const bufferingEl = document.getElementById('buffering');
+    const timeDisplay = document.getElementById('time-display');
+    const progressBar = document.getElementById('progress-bar');
+    const totalTimeEl = document.getElementById('total-time');
+    const stepCountEl = document.getElementById('step-count');
+    bufferingEl.style.display = 'flex';
+    timeDisplay.style.display = 'block';
+    progressBar.style.width = '4%';
+    let startTime = Date.now();
+    let stepCount = 0;
+
+    const animating = setInterval(calculate, 1200);
     function calculate(){
         //get head
         let head = document.getElementById("head");
@@ -51,10 +63,18 @@ function simulation(){
         //get current cell alphabet
         let currentAlphabet = tapeContent[headCurrentPosition].innerHTML;
 
-        //transition result
-        let nextState = transition[currentState][currentAlphabet][0];
-        let writeToCell = transition[currentState][currentAlphabet][1];
-        let headMovement = transition[currentState][currentAlphabet][2];
+        //transition result (guard against undefined transitions)
+        let trans = transition[currentState] && transition[currentState][currentAlphabet];
+        if(!trans){
+            // no valid transition => reject
+            var nextState = "Reject";
+            var writeToCell = currentAlphabet;
+            var headMovement = "R";
+        }else{
+            var nextState = trans[0];
+            var writeToCell = trans[1];
+            var headMovement = trans[2];
+        }
 
 
         //ubah state
@@ -74,14 +94,23 @@ function simulation(){
             headChild[headCurrentPosition].innerHTML = " ";
         }
 
+        // increment step counter and update progress
+        stepCount++;
+        stepCountEl.innerText = stepCount;
+        // progress growth heuristic (grow with steps but cap before completion)
+        let prog = Math.min(95, 4 + stepCount * 10);
+        progressBar.style.width = prog + '%';
+
         if((nextState == "Accept") || (nextState == "Reject") ){
             //assign value to finalState
-            //get rid of the button
-            //let processButton = document.getElementById("process-button");
-            //processButton.style.display = "none";
             //show result message
             let result = document.getElementById("result");
-            result.innerHTML = "The String is " + nextState + "ed";
+            let elapsed = (Date.now() - startTime) / 1000;
+            totalTimeEl.innerText = elapsed.toFixed(3) + 's';
+            progressBar.style.width = '100%';
+            bufferingEl.style.display = 'none';
+            result.innerHTML = "The String is " + nextState + "ed" +
+                                " (waktu: " + elapsed.toFixed(3) + "s, langkah: " + stepCount + ")";
             result.style.display = "flex";
         }
 
@@ -90,10 +119,6 @@ function simulation(){
         operation.innerHTML = "("+ currentState + ", " + currentAlphabet + ") "+
                                 "-->" + "(" + nextState + "," + writeToCell +
                                 ", " +headMovement + ")";
-        
-        //hide process button
-        let processButton = document.getElementById("process-button");
-        processButton.style.display = "none";
 
         //function so stop the animation
         if((nextState == "Accept") || (nextState == "Reject") ){

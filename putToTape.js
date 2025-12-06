@@ -1,4 +1,4 @@
-function putToTape() {
+function putToTapeAndSimulate() {
     let input = document.getElementById("input_string").value;
     //evalueate if the input only contain symbol 'a' and 'b'
     const symbol = ["a", "b"];
@@ -50,13 +50,14 @@ function putToTape() {
     document.getElementById('process-and-result').style.display = "flex";
     //reset hasil operation
     document.getElementById("operation").innerHTML = "( ) --> ( )";
-    //show the operation button
-    let processButton = document.getElementById("process-button");
-    processButton.style.display = "flex";
-    processButton.innerHTML = "Simulate";
+    //show the process div
+    document.getElementById("process").style.display = "flex";
     //hide result message
     let result = document.getElementById("result");
     result.style.display = "none";
+    
+    // Start simulation immediately
+    simulation();
 }
 
 

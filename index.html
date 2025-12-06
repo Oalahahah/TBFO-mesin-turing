@@ -12,14 +12,29 @@
             <div id="main-container">
 
                 <div id="title">
-                    <h1 id="main-title">TURING <span style="color:#B6FFFA">MACHINE</span> SIMULATION</h1>
-                    <h2 id="language">L = b*ab</h2>
+                    <h1 id="main-title">SIMULASI MESIN TURING</h1>
+                    <h2 id="language-spec">Dengan Inputan: <span id="language-value">L = b*ab</span></h2>
+
+                    <div id="status-row">
+                        <div id="buffering" style="display:none;">
+                            <div class="spinner" aria-hidden="true"></div>
+                            <span id="buffering-text">Buffering...</span>
+                            <div id="progress">
+                                <div id="progress-bar"></div>
+                            </div>
+                        </div>
+
+                        <div id="time-display" style="display:none;">
+                            Total waktu: <span id="total-time">0.00s</span>
+                            &nbsp;|&nbsp; Langkah: <span id="step-count">0</span>
+                        </div>
+                    </div>
                 </div>
 
                 <form>
                     <label for="input_string"><span>Masukkan Input String &Sigma;*={a,b}:</span></label><br>
                     <input type="text" id="input_string" name="input_string"><br>
-                    <button type="button" onclick="putToTape()">Put into Tape</button>
+                    <button type="button" onclick="putToTapeAndSimulate()">Proses String</button>
                 </form>
 
                 <div id="turing-container">
@@ -39,12 +54,9 @@
                 
 
                 <div id="process-and-result">
-                    <div id="process">
+                    <div id="process" style="display:none;">
                         <p class="operation">Operasi yang telah dilakukan :</p>
                         <p class="operation" id="operation">( ) --> ( )</p>
-                        <button id="process-button" type="button" onclick="simulation()">
-                            Simulate
-                        </button>
                     </div>
 
                     <div id="result">
