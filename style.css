@@ -1,0 +1,196 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+
+/* create and arrow for turing machine head*/
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #B6FFFA;
+}
+
+
+#background-container{
+    background-image: url("image/night_village.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+#main-container{
+    background-color: rgba(0, 0, 0, 0.78);
+    border: 3px solid #B6FFFA;
+    border-radius: 40px;
+    min-height: 85vh;
+    min-width: 70vw;
+    max-width: 85vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:space-around;
+    overflow: auto;
+}
+
+#title{
+    /*border: 1px solid white;*/
+    min-width: 70%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+#title > #main-title{
+    color: white;
+    font-size: 3em;
+    font-weight:bold;
+    /*border: 1px solid white;*/
+    padding: 5px;
+    text-align: center;
+}
+
+#title > #language{
+    font-size: 1.8em;
+    /*border: 1px solid white;*/
+    text-align: center;
+    padding: 5px;
+}
+
+form{
+    /*border: 1px solid white;*/
+    min-width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*form > label {
+    border: 1px solid white;
+}*/
+
+form > label > span{
+    padding: 0%;
+    font-size: 1.2em;
+}
+
+form > #input_string{
+    min-width: 80%;
+    background-color: transparent;
+    border: 1px solid #B6FFFA;
+    font-size: 1.3em;
+    padding: 2px;
+    text-align: center;
+}
+
+form > button{
+    background-color: transparent;
+    border: 1px solid #B6FFFA;
+    color: #B6FFFA;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 8px 15px;
+}
+
+#turing-container{
+    /*border: 1px solid white;*/
+    min-width: 80%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+}
+
+#turing-machine, tr, td{
+    /*border: 1px solid white;*/
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+#turing-machine{
+    min-width: 10%;
+    font-size: 1.7em;
+    text-align: center;
+}
+
+#tape{
+    border: 1px solid white;
+}
+
+#tape > td{
+    border: 1px solid white;
+}
+
+
+
+#process-and-result{
+    /*border: 1px solid white;*/
+    min-width: 30%;
+    display: none;
+    /*display: flex;*/
+    flex-direction: column;
+    align-items: center;
+}
+
+#process{
+    /*border: 1px solid white;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#process > .operation{
+    font-size: 1.1em;
+    padding: 8px 1px;
+    font-weight: 500;
+}
+
+#process > #process-button{
+    color: #B6FFFA;
+    background-color: transparent;
+    border: 1px solid #B6FFFA;
+    border-radius: 6px;
+    font-size: 1.1em;
+    padding: 6px 14px;
+}
+
+#result{
+    display: none;
+    color: #B6FFFA;
+    /*border: 1px solid white;*/
+    padding: 8px 1px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+form > button:hover{
+    color: white;
+    cursor:pointer;
+}
+
+#process > #process-button:hover{
+    color: white;
+    cursor:pointer;
+}
+
+form > button:active{
+    background-color: #00524c;
+    color: white;
+    cursor:pointer;
+}
+
+#process > #process-button:active{
+    background-color: #00524c;
+    color: white;
+    cursor:pointer;
+}

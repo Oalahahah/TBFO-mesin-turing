@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Turing Machine Project</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="background-container">
+            <div id="main-container">
+
+                <div id="title">
+                    <h1 id="main-title">TURING <span style="color:#B6FFFA">MACHINE</span> SIMULATION</h1>
+                    <h2 id="language">L = ab*a</h2>
+                </div>
+
+                <form>
+                    <label for="input_string"><span>Masukkan Input String &Sigma;*={a,b}:</span></label><br>
+                    <input type="text" id="input_string" name="input_string"><br>
+                    <button type="button" onclick="putToTape()">Put into Tape</button>
+                </form>
+
+                <div id="turing-container">
+                    <table id="turing-machine">
+                        <tr id="head" class="head-current-state">
+                            <td id="head-arrow" colspan="3">
+                                <div class="arrow-down"></div>
+                            </td>
+                        </tr>
+                        <tr id="tape">
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>    
+                
+
+                <div id="process-and-result">
+                    <div id="process">
+                        <p class="operation">Operasi yang telah dilakukan :</p>
+                        <p class="operation" id="operation">( ) --> ( )</p>
+                        <button id="process-button" type="button" onclick="simulation()">
+                            Simulate
+                        </button>
+                    </div>
+
+                    <div id="result">
+                        <p>______</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script src="putToTape.js"></script>
+        <script src="calculation.js"></script>
+    </body>
+</html>
