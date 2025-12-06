@@ -1,25 +1,25 @@
 const transition = {
-    // Start state: accept any number of leading 'b's (stay in A),
+    // Start state: Diterima any number of leading 'b's (stay in A),
     // then an 'a' moves to B, then a single 'b' moves to C.
-    // After C, the next symbol must be blank '-' to accept.
+    // After C, the next symbol must be blank '-' to Diterima.
     "A":{
         "b":["A", "b", "R"],
         "a":["B", "a", "R"],
-        "-":["Reject", "-", "R"]
+        "-":["Ditolak", "-", "R"]
     },
     "B":{
         "b":["C", "b", "R"],
-        "a":["Reject", "a", "R"],
-        "-":["Reject", "-", "R"]
+        "a":["Ditolak", "a", "R"],
+        "-":["Ditolak", "-", "R"]
     },
     "C":{
-        // after the final required 'b', we must see a blank to accept
-        "b":["Reject", "b", "R"],
-        "a":["Reject", "a", "R"],
-        "-":["Accept", "-", "R"]
+        // after the final required 'b', we must see a blank to Diterima
+        "b":["Ditolak", "b", "R"],
+        "a":["Ditolak", "a", "R"],
+        "-":["Diterima", "-", "R"]
     },
-    "Accept":[],
-    "Reject":[]
+    "Diterima":[],
+    "Ditolak":[]
 };
 
 function simulation(){
@@ -66,8 +66,8 @@ function simulation(){
         //transition result (guard against undefined transitions)
         let trans = transition[currentState] && transition[currentState][currentAlphabet];
         if(!trans){
-            // no valid transition => reject
-            var nextState = "Reject";
+            // no valid transition => Ditolak
+            var nextState = "Ditolak";
             var writeToCell = currentAlphabet;
             var headMovement = "R";
         }else{
@@ -101,7 +101,7 @@ function simulation(){
         let prog = Math.min(95, 4 + stepCount * 10);
         progressBar.style.width = prog + '%';
 
-        if((nextState == "Accept") || (nextState == "Reject") ){
+        if((nextState == "Diterima") || (nextState == "Ditolak") ){
             //assign value to finalState
             //show result message
             let result = document.getElementById("result");
@@ -109,7 +109,7 @@ function simulation(){
             totalTimeEl.innerText = elapsed.toFixed(3) + 's';
             progressBar.style.width = '100%';
             bufferingEl.style.display = 'none';
-            result.innerHTML = "The String is " + nextState + "ed" +
+            result.innerHTML = "String " + nextState +
                                 " (waktu: " + elapsed.toFixed(3) + "s, langkah: " + stepCount + ")";
             result.style.display = "flex";
         }
@@ -121,7 +121,7 @@ function simulation(){
                                 ", " +headMovement + ")";
 
         //function so stop the animation
-        if((nextState == "Accept") || (nextState == "Reject") ){
+        if((nextState == "Diterima") || (nextState == "Ditolak") ){
             clearInterval(animating);
         }
     }
