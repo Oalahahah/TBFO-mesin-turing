@@ -1,37 +1,21 @@
 const transition = {
-    "A":{  //state tujuan, write, arah
-        "a":["B", "$", "R"],
-        "b":["C", "$", "R"],
-        "-":"halt"
-    },
-    "B":{ 
+    // Start state: accept any number of leading 'b's (stay in A),
+    // then an 'a' moves to B, then a single 'b' moves to C.
+    // After C, the next symbol must be blank '-' to accept.
+    "A":{
+        "b":["A", "b", "R"],
         "a":["B", "a", "R"],
-        "b":["C", "a", "R"],
-        "-":["D", "a", "L"]
+        "-":["Reject", "-", "R"]
     },
-    "C":{ 
-        "a":["B", "b", "R"],
+    "B":{
         "b":["C", "b", "R"],
-        "-":["D", "b", "L"]
-    },
-    "D":{ 
-        "a":["D", "a", "L"],
-        "b":["D", "b", "L"],
-        "$":["E", "$", "R"]
-    },
-    "E":{ 
-        "a":["F", "0", "R"],
-        "b":["Reject", "b", "R"],
-        "-":["Reject", "-", "R"]
-    },
-    "F":{ 
-        "a":["G", "0", "R"],
-        "b":["F", "1", "R"],
-        "-":["Reject", "-", "R"]
-    },
-    "G":{ 
         "a":["Reject", "a", "R"],
+        "-":["Reject", "-", "R"]
+    },
+    "C":{
+        // after the final required 'b', we must see a blank to accept
         "b":["Reject", "b", "R"],
+        "a":["Reject", "a", "R"],
         "-":["Accept", "-", "R"]
     },
     "Accept":[],
