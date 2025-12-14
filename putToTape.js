@@ -4,13 +4,13 @@ function putToTapeAndSimulate() {
     const symbol = ["a", "b"];
     for(let char of input){
         if (!symbol.includes(char)) {
-            window.alert("symbol yang bisa dimasukkan hanya a dan b");
+            window.alert("simbol yang bisa dimasukkan hanya a dan b");
             return;
-            break;
         }
     }
-    //add blank to input
-    input += "---";
+    
+    //add marker and blank to input
+    input = "$" + input + "---";
     let inputLength = input.length;
 
     let tape = document.getElementById("tape");
@@ -21,9 +21,10 @@ function putToTapeAndSimulate() {
     arrow.setAttribute("class", "arrow-down");
     //clear the head row
     head.innerHTML = "";
-    //put new arrow to turing machine
+    
+    //put new arrow to turing machine - start at position 1 (after $)
     for (let i = 0; i < inputLength; i++){
-        if(i == 0){
+        if(i == 1){  // Position 1 is first character after $
             let cell = document.createElement("td");
             cell.appendChild(arrow);
             head.appendChild(cell);
@@ -34,17 +35,16 @@ function putToTapeAndSimulate() {
         }
     }
         
-
     // Clear the tape row
     tape.innerHTML = "";
-    //put string into tape
+    //put string into tape (including $ marker)
     for (let i = 0; i < inputLength; i++){
         let cell = document.createElement("td");
         cell.textContent = input[i];
         tape.appendChild(cell);
     }
 
-    //reset head state to A
+    //reset head state to A (start after $)
     head.setAttribute("class","A");
     //display #process-and-result from none
     document.getElementById('process-and-result').style.display = "flex";
@@ -56,11 +56,6 @@ function putToTapeAndSimulate() {
     let result = document.getElementById("result");
     result.style.display = "none";
     
-    // Initialize head position at 0
-    window.headPosition = 0;
-    
     // Start simulation immediately
     simulation();
 }
-
-
