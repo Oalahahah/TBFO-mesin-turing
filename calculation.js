@@ -62,7 +62,7 @@ function simulation(){
     let startTime = Date.now();
     let stepCount = 0;
 
-    const animating = setInterval(calculate, 1500);
+    const animating = setInterval(calculate, 500);
     
     function calculate(){
         //get head
