@@ -56,6 +56,9 @@ function putToTapeAndSimulate() {
     let result = document.getElementById("result");
     result.style.display = "none";
     
+    // Initialize head position at 0
+    window.headPosition = 0;
+    
     // Start simulation immediately
     simulation();
 }

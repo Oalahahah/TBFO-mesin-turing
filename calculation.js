@@ -1,25 +1,54 @@
 const transition = {
-    // Start state: Diterima any number of leading 'b's (stay in A),
-    // then an 'a' moves to B, then a single 'b' moves to C.
-    // After C, the next symbol must be blank '-' to Diterima.
-    "A":{
-        "b":["A", "b", "R"],
-        "a":["B", "a", "R"],
-        "-":["Ditolak", "-", "R"]
+    "A":{  //state tujuan, write, arah
+        "a":["B", "$", "R"],
+        "b":["C", "$", "R"],
+        "-":"Reject"
     },
-    "B":{
+    "B":{ 
+        "a":["Reject", "a", "R"],
+        "b":["D", "a", "R"],
+        "-":["Reject", "a", "R"]
+    },
+    "C":{ 
+        "a":["B", "b", "R"],
         "b":["C", "b", "R"],
-        "a":["Ditolak", "a", "R"],
-        "-":["Ditolak", "-", "R"]
+        "-":["Reject", "b", "R"]
     },
-    "C":{
-        // after the final required 'b', we must see a blank to Diterima
-        "b":["Ditolak", "b", "R"],
-        "a":["Ditolak", "a", "R"],
-        "-":["Diterima", "-", "R"]
+    "D":{ 
+        "a":["Reject", "a", "R"],
+        "b":["Reject", "b", "R"],
+        "-":["E", "b", "L"]
     },
-    "Diterima":[],
-    "Ditolak":[]
+    "E":{ 
+        "a":["E", "a", "L"],
+        "b":["E", "b", "L"],
+        "$":["F", "$", "R"]
+    },
+    "F":{ 
+        "a":["Reject", "0", "R"],
+        "b":["G", "0", "R"],
+        "-":["Reject", "-", "R"]
+    },
+    "G":{ 
+        "a":["H", "0", "R"],
+        "b":["G", "0", "R"],
+        "-":["Reject", "-", "R"]
+    },
+    "H":{ 
+        "a":["Reject", "a", "R"],
+        "b":["I", "1", "R"],
+        "0":["Reject", "0", "R"],
+        "-":["Reject", "-", "R"]
+    },
+    "I":{
+        "a":["Reject", "a", "R"],
+        "b":["Reject", "b", "R"],
+        "0":["Reject", "0", "R"],
+        "1":["Reject", "1", "R"],
+        "-":["Accept", "-", "R"]
+    },
+    "Accept":[],
+    "Reject":[]
 };
 
 function simulation(){
@@ -35,7 +64,8 @@ function simulation(){
     let startTime = Date.now();
     let stepCount = 0;
 
-    const animating = setInterval(calculate, 1200);
+    const animating = setInterval(calculate, 1500);
+    
     function calculate(){
         //get head
         let head = document.getElementById("head");
@@ -47,7 +77,6 @@ function simulation(){
         //create new arrow
         let arrow = document.createElement("div");
         arrow.setAttribute("class", "arrow-down");
-
         
         //get head current position
         let headCurrentPosition = 0;
@@ -57,71 +86,105 @@ function simulation(){
                 break;
             }
         }
-
         //get current state
         let currentState = head.getAttribute("class");
         //get current cell alphabet
         let currentAlphabet = tapeContent[headCurrentPosition].innerHTML;
-
-        //transition result (guard against undefined transitions)
+        
+        //transition result with guard
         let trans = transition[currentState] && transition[currentState][currentAlphabet];
+        let nextState, writeToCell, headMovement;
+        
         if(!trans){
-            // no valid transition => Ditolak
-            var nextState = "Ditolak";
-            var writeToCell = currentAlphabet;
-            var headMovement = "R";
-        }else{
-            var nextState = trans[0];
-            var writeToCell = trans[1];
-            var headMovement = trans[2];
+            // No transition defined => Reject
+            nextState = "Reject";
+            writeToCell = currentAlphabet;
+            headMovement = "R";
+        } else if(typeof trans === 'string'){
+            // Direct string (like "Reject")
+            nextState = trans;
+            writeToCell = currentAlphabet;
+            headMovement = "R";
+        } else {
+            nextState = trans[0];
+            writeToCell = trans[1];
+            headMovement = trans[2];
         }
-
-
+        
         //ubah state
-        head.setAttribute("class",nextState);
+        head.setAttribute("class", nextState);
         //write into tape
         tapeContent[headCurrentPosition].innerHTML = writeToCell;
         tapeContent[headCurrentPosition].style.color = '#B6FFFA';
-
-        //head movement
+        
+        //head movement with tape expansion
         if(headMovement == "R"){
             //head move to the right
+            // Check if we need to expand tape to the right
+            if(headCurrentPosition + 1 >= headChild.length){
+                let newTapeCell = document.createElement("td");
+                newTapeCell.textContent = "-";
+                tape.appendChild(newTapeCell);
+                
+                let newHeadCell = document.createElement("td");
+                newHeadCell.textContent = " ";
+                head.appendChild(newHeadCell);
+                
+                // Update references
+                headChild = head.getElementsByTagName("td");
+                tapeContent = tape.getElementsByTagName("td");
+            }
             headChild[headCurrentPosition + 1].appendChild(arrow);
             headChild[headCurrentPosition].innerHTML = " ";
-        }else{
+        } else {
             //head move to the left
-            headChild[headCurrentPosition - 1].appendChild(arrow);
-            headChild[headCurrentPosition].innerHTML = " ";
+            // Check if we need to expand tape to the left
+            if(headCurrentPosition === 0){
+                let newTapeCell = document.createElement("td");
+                newTapeCell.textContent = "-";
+                tape.insertBefore(newTapeCell, tapeContent[0]);
+                
+                let newHeadCell = document.createElement("td");
+                newHeadCell.textContent = " ";
+                head.insertBefore(newHeadCell, headChild[0]);
+                
+                // Update references
+                headChild = head.getElementsByTagName("td");
+                tapeContent = tape.getElementsByTagName("td");
+                
+                // Arrow goes to position 0 (new leftmost position)
+                headChild[0].appendChild(arrow);
+            } else {
+                headChild[headCurrentPosition - 1].appendChild(arrow);
+                headChild[headCurrentPosition].innerHTML = " ";
+            }
         }
-
+        
         // increment step counter and update progress
         stepCount++;
         stepCountEl.innerText = stepCount;
-        // progress growth heuristic (grow with steps but cap before completion)
-        let prog = Math.min(95, 4 + stepCount * 10);
+        let prog = Math.min(95, 4 + stepCount * 8);
         progressBar.style.width = prog + '%';
-
-        if((nextState == "Diterima") || (nextState == "Ditolak") ){
-            //assign value to finalState
+        
+        if((nextState == "Accept") || (nextState == "Reject")){
             //show result message
             let result = document.getElementById("result");
             let elapsed = (Date.now() - startTime) / 1000;
             totalTimeEl.innerText = elapsed.toFixed(3) + 's';
             progressBar.style.width = '100%';
             bufferingEl.style.display = 'none';
-            result.innerHTML = "String " + nextState +
-                                " (waktu: " + elapsed.toFixed(3) + "s, langkah: " + stepCount + ")";
+            result.innerHTML = "String " + nextState + "ed (waktu: " + elapsed.toFixed(3) + "s, langkah: " + stepCount + ")";
             result.style.display = "flex";
         }
-
+        
         //print operasi apa yang telah dilakukan
         let operation = document.getElementById("operation");
         operation.innerHTML = "("+ currentState + ", " + currentAlphabet + ") "+
                                 "-->" + "(" + nextState + "," + writeToCell +
-                                ", " +headMovement + ")";
-
-        //function so stop the animation
-        if((nextState == "Diterima") || (nextState == "Ditolak") ){
+                                ", " + headMovement + ")";
+        
+        //function to stop the animation
+        if((nextState == "Accept") || (nextState == "Reject")){
             clearInterval(animating);
         }
     }
